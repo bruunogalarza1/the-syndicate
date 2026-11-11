@@ -1,208 +1,224 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-html,
-body {
-    width: 100%;
-    height: 100%;
+html {
+    scroll-behavior: smooth;
 }
 
 body {
     background: #020204;
-    color: white;
-    font-family: Arial, Helvetica, sans-serif;
+    color: #f5f5f5;
+    font-family: 'Inter', Arial, sans-serif;
+    overflow-x: hidden;
+}
+
+body::selection {
+    background: white;
+    color: black;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button {
+    font-family: inherit;
+}
+
+/* =========================
+   CARGA
+========================= */
+
+#loader {
+    position: fixed;
+    inset: 0;
+    background: #020204;
+    z-index: 9999;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    transition:
+        opacity 1s ease,
+        visibility 1s ease;
+}
+
+#loader.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+#loader p {
+    margin-top: 20px;
+
+    font-size: 9px;
+    letter-spacing: 5px;
+
+    color: rgba(255,255,255,.35);
+}
+
+.loader-line {
+    width: 120px;
+    height: 1px;
+
+    background: rgba(255,255,255,.1);
+
+    position: relative;
     overflow: hidden;
 }
 
-.hero {
-    width: 100vw;
-    height: 100vh;
+.loader-line::after {
+    content: "";
+
+    position: absolute;
+
+    width: 40%;
+    height: 100%;
+
+    background: white;
+
+    animation: loading 1.2s infinite;
+}
+
+@keyframes loading {
+
+    0% {
+        left: -40%;
+    }
+
+    100% {
+        left: 100%;
+    }
+}
+
+
+/* =========================
+   FONDO
+========================= */
+
+#digitalCanvas {
+    position: fixed;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    pointer-events: none;
+
+    opacity: .35;
+
+    z-index: 0;
+}
+
+.noise {
+    position: fixed;
+    inset: 0;
+
+    pointer-events: none;
+
+    z-index: 100;
+
+    opacity: .035;
+
+    background-image:
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
+}
+
+
+/* =========================
+   HERO
+========================= */
+
+#inicio {
+    min-height: 100vh;
+
+    position: relative;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    position: relative;
-
-    background:
-        radial-gradient(
-            circle at center,
-            rgba(30, 30, 40, 0.25) 0%,
-            rgba(2, 2, 4, 1) 65%
-        );
+    overflow: hidden;
 }
 
-/* ROSTRO */
-
-.face {
+.face-container {
     position: absolute;
 
-    width: 280px;
-    height: 360px;
+    width: 430px;
+    height: 520px;
+
+    left: 50%;
+    top: 40%;
+
+    transform: translate(-50%, -50%);
+
+    z-index: 1;
+
+    transition: transform .15s ease-out;
+}
+
+#faceCanvas {
+    position: absolute;
+
+    width: 100%;
+    height: 100%;
+
+    inset: 0;
+}
+
+.face-glow {
+    position: absolute;
+
+    width: 250px;
+    height: 250px;
 
     left: 50%;
     top: 42%;
 
     transform: translate(-50%, -50%);
 
-    border-radius: 48% 48% 45% 45%;
+    border-radius: 50%;
 
     background:
         radial-gradient(
-            ellipse at center,
-            rgba(80, 80, 100, 0.25) 0%,
-            rgba(15, 15, 20, 0.15) 45%,
-            rgba(0, 0, 0, 0) 75%
+            circle,
+            rgba(110,110,255,.12),
+            rgba(0,0,0,0) 70%
         );
 
-    box-shadow:
-        0 0 80px rgba(120, 120, 255, 0.08);
-
-    opacity: 0.8;
-
-    transition:
-        transform 0.15s ease-out,
-        filter 0.3s ease;
+    filter: blur(20px);
 }
 
-/* OJOS */
-
-.eye {
-    position: absolute;
-
-    width: 55px;
-    height: 14px;
-
-    top: 43%;
-
-    background: rgba(180, 190, 255, 0.75);
-
-    border-radius: 50%;
-
-    box-shadow:
-        0 0 15px rgba(150, 160, 255, 0.7),
-        0 0 35px rgba(100, 110, 255, 0.25);
-
-    transition:
-        transform 0.1s ease-out,
-        opacity 0.2s;
-}
-
-.eye.left {
-    left: 24%;
-}
-
-.eye.right {
-    right: 24%;
-}
-
-/* CONTENIDO */
-
-.content {
-    position: relative;
-
-    z-index: 10;
-
-    text-align: center;
-
-    margin-top: 430px;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.small-text {
-    font-size: 11px;
-
-    letter-spacing: 5px;
-
-    color: rgba(255, 255, 255, 0.45);
-
-    margin-bottom: 18px;
-}
-
-h1 {
-    font-size: clamp(48px, 9vw, 110px);
-
-    letter-spacing: 14px;
-
-    font-weight: 300;
-
-    margin-left: 14px;
-
-    text-shadow:
-        0 0 25px rgba(255, 255, 255, 0.08);
-}
-
-.subtitle {
-    margin-top: 12px;
-
-    font-size: 14px;
-
-    letter-spacing: 4px;
-
-    color: rgba(255, 255, 255, 0.45);
-}
-
-/* BOTÓN */
-
-#enterButton {
-    margin-top: 45px;
-
-    padding: 17px 35px;
-
-    background: transparent;
-
-    color: white;
-
-    border: 1px solid rgba(255, 255, 255, 0.3);
-
-    font-size: 11px;
-
-    letter-spacing: 4px;
-
-    cursor: pointer;
-
-    transition:
-        background 0.3s,
-        box-shadow 0.3s,
-        transform 0.3s;
-}
-
-#enterButton:hover {
-    background: rgba(255, 255, 255, 0.08);
-
-    box-shadow:
-        0 0 30px rgba(150, 160, 255, 0.15);
-
-    transform: translateY(-2px);
-}
-
-/* EFECTO DE ESCANEO */
-
-.hero::before {
-    content: "";
-
+.scan-line {
     position: absolute;
 
     width: 100%;
     height: 1px;
 
-    top: 50%;
+    top: 10%;
 
-    background: rgba(150, 160, 255, 0.08);
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(150,150,255,.4),
+            transparent
+        );
 
-    box-shadow:
-        0 0 20px rgba(150, 160, 255, 0.15);
+    opacity: .3;
 
-    animation: scan 5s linear infinite;
+    animation: faceScan 4s linear infinite;
 }
 
-@keyframes scan {
+@keyframes faceScan {
 
     0% {
         top: 15%;
@@ -210,11 +226,11 @@ h1 {
     }
 
     20% {
-        opacity: 1;
+        opacity: .5;
     }
 
     80% {
-        opacity: 1;
+        opacity: .5;
     }
 
     100% {
@@ -223,30 +239,683 @@ h1 {
     }
 }
 
-/* MÓVIL */
 
-@media (max-width: 600px) {
+/* =========================
+   HERO TEXTO
+========================= */
 
-    .face {
-        width: 220px;
-        height: 290px;
-        top: 38%;
+.hero-content {
+    position: relative;
+
+    z-index: 5;
+
+    text-align: center;
+
+    margin-top: 420px;
+
+    width: 100%;
+
+    animation: heroAppear 2s ease forwards;
+
+    opacity: 0;
+}
+
+@keyframes heroAppear {
+
+    to {
+        opacity: 1;
+    }
+}
+
+.eyebrow,
+.label {
+    font-size: 9px;
+
+    letter-spacing: 5px;
+
+    color: rgba(255,255,255,.4);
+
+    text-transform: uppercase;
+}
+
+.hero-content h1 {
+    margin-top: 20px;
+
+    font-size: clamp(48px, 9vw, 120px);
+
+    line-height: .9;
+
+    font-weight: 300;
+
+    letter-spacing: 15px;
+
+    margin-left: 15px;
+
+    text-shadow:
+        0 0 40px rgba(255,255,255,.08);
+}
+
+.hero-description {
+    margin-top: 25px;
+
+    font-size: 13px;
+
+    letter-spacing: 4px;
+
+    color: rgba(255,255,255,.4);
+}
+
+.main-button {
+    margin-top: 45px;
+
+    padding: 17px 30px;
+
+    background: rgba(255,255,255,.02);
+
+    border: 1px solid rgba(255,255,255,.25);
+
+    color: white;
+
+    font-size: 9px;
+
+    letter-spacing: 4px;
+
+    cursor: pointer;
+
+    transition:
+        .3s ease;
+
+    backdrop-filter: blur(10px);
+}
+
+.main-button span {
+    margin-left: 15px;
+
+    transition: transform .3s ease;
+}
+
+.main-button:hover {
+    background: white;
+
+    color: black;
+
+    box-shadow:
+        0 0 50px rgba(150,150,255,.12);
+}
+
+.main-button:hover span {
+    transform: translateX(5px);
+}
+
+.scroll-indicator {
+    margin-top: 60px;
+
+    font-size: 8px;
+
+    letter-spacing: 3px;
+
+    color: rgba(255,255,255,.2);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.scroll-indicator span {
+    display: block;
+
+    width: 25px;
+    height: 1px;
+
+    background: rgba(255,255,255,.3);
+
+    animation: scrollPulse 1.8s infinite;
+}
+
+@keyframes scrollPulse {
+
+    0%,100% {
+        transform: scaleX(.4);
+        opacity: .3;
     }
 
-    .content {
-        margin-top: 350px;
+    50% {
+        transform: scaleX(1);
+        opacity: 1;
+    }
+}
+
+
+/* =========================
+   SECCIONES
+========================= */
+
+.section {
+    min-height: 100vh;
+
+    position: relative;
+
+    padding:
+        160px 8vw;
+
+    display: flex;
+    align-items: center;
+
+    border-top: 1px solid rgba(255,255,255,.05);
+}
+
+.section-number {
+    position: absolute;
+
+    top: 60px;
+    left: 8vw;
+
+    font-size: 9px;
+
+    letter-spacing: 3px;
+
+    color: rgba(255,255,255,.2);
+}
+
+
+/* =========================
+   HISTORIA
+========================= */
+
+.story-content {
+    max-width: 1100px;
+}
+
+.story-content h2,
+.reality-content h2,
+.mission-content h2 {
+    margin-top: 35px;
+
+    font-size: clamp(48px, 8vw, 110px);
+
+    line-height: .9;
+
+    font-weight: 300;
+
+    letter-spacing: -3px;
+}
+
+.story-text {
+    margin-top: 60px;
+
+    max-width: 600px;
+
+    font-size: 17px;
+
+    line-height: 1.9;
+
+    color: rgba(255,255,255,.55);
+}
+
+.story-text p {
+    margin-bottom: 28px;
+}
+
+.story-text strong {
+    color: white;
+}
+
+
+/* =========================
+   MANIFIESTO
+========================= */
+
+.manifesto {
+    background:
+        radial-gradient(
+            circle at 70% 50%,
+            rgba(80,80,150,.06),
+            transparent 40%
+        );
+}
+
+.manifesto-content {
+    width: 100%;
+}
+
+.manifesto-list {
+    margin-top: 70px;
+
+    width: 100%;
+}
+
+.manifesto-list div {
+    display: flex;
+    align-items: center;
+
+    border-top: 1px solid rgba(255,255,255,.1);
+
+    padding: 30px 0;
+
+    transition:
+        padding .4s ease,
+        background .4s ease;
+}
+
+.manifesto-list div:last-child {
+    border-bottom: 1px solid rgba(255,255,255,.1);
+}
+
+.manifesto-list div:hover {
+    padding-left: 25px;
+}
+
+.manifesto-list span {
+    width: 70px;
+
+    font-size: 9px;
+
+    color: rgba(255,255,255,.25);
+}
+
+.manifesto-list h3 {
+    font-size: clamp(25px, 4vw, 55px);
+
+    font-weight: 300;
+
+    letter-spacing: 2px;
+}
+
+
+/* =========================
+   REALITY
+========================= */
+
+.reality-content {
+    width: 100%;
+}
+
+.cards {
+    margin-top: 80px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 20px;
+}
+
+.cards article {
+    min-height: 280px;
+
+    padding: 35px;
+
+    border: 1px solid rgba(255,255,255,.08);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.025),
+            rgba(255,255,255,.005)
+        );
+
+    transition:
+        transform .4s ease,
+        border-color .4s ease;
+}
+
+.cards article:hover {
+    transform: translateY(-8px);
+
+    border-color:
+        rgba(255,255,255,.25);
+}
+
+.cards span {
+    font-size: 9px;
+
+    color: rgba(255,255,255,.25);
+}
+
+.cards h3 {
+    margin-top: 70px;
+
+    font-size: 22px;
+
+    font-weight: 400;
+
+    letter-spacing: 2px;
+}
+
+.cards p {
+    margin-top: 15px;
+
+    color: rgba(255,255,255,.4);
+
+    line-height: 1.7;
+
+    font-size: 13px;
+}
+
+
+/* =========================
+   MISIÓN
+========================= */
+
+.mission {
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(100,100,255,.05),
+            transparent 55%
+        );
+}
+
+.mission-content {
+    max-width: 1000px;
+}
+
+.mission-text {
+    max-width: 600px;
+
+    margin-top: 60px;
+
+    font-size: 17px;
+
+    line-height: 1.9;
+
+    color: rgba(255,255,255,.45);
+}
+
+.mission-text.highlight {
+    color: white;
+
+    font-size: 22px;
+
+    margin-top: 30px;
+}
+
+
+/* =========================
+   COMUNIDAD
+========================= */
+
+.community {
+    min-height: 100vh;
+
+    text-align: center;
+
+    justify-content: center;
+
+    overflow: hidden;
+}
+
+.community-glow {
+    position: absolute;
+
+    width: 600px;
+    height: 600px;
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%,-50%);
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(100,100,255,.08),
+            transparent 65%
+        );
+
+    pointer-events: none;
+}
+
+.community-content {
+    position: relative;
+
+    z-index: 2;
+
+    width: 100%;
+
+    max-width: 900px;
+}
+
+.community h2 {
+    margin-top: 30px;
+
+    font-size: clamp(55px, 10vw, 130px);
+
+    font-weight: 300;
+
+    line-height: .9;
+
+    letter-spacing: -4px;
+}
+
+.community h2 span {
+    display: block;
+
+    color: rgba(255,255,255,.2);
+}
+
+.community-content > p {
+    margin-top: 30px;
+
+    color: rgba(255,255,255,.4);
+
+    font-size: 14px;
+}
+
+.counter {
+    margin: 70px auto 0;
+
+    max-width: 600px;
+}
+
+.counter-number {
+    font-size: 55px;
+
+    font-weight: 300;
+}
+
+.counter-number small {
+    font-size: 16px;
+
+    color: rgba(255,255,255,.25);
+}
+
+.progress {
+    margin-top: 25px;
+
+    width: 100%;
+
+    height: 2px;
+
+    background: rgba(255,255,255,.08);
+}
+
+#progressBar {
+    width: 0%;
+
+    height: 100%;
+
+    background: white;
+
+    box-shadow:
+        0 0 20px rgba(255,255,255,.5);
+
+    transition: width 1.5s ease;
+}
+
+.counter p {
+    margin-top: 20px;
+
+    font-size: 8px;
+
+    letter-spacing: 4px;
+
+    color: rgba(255,255,255,.25);
+}
+
+.telegram-button {
+    display: inline-flex;
+
+    align-items: center;
+
+    margin-top: 55px;
+
+    padding: 20px 35px;
+
+    border: 1px solid rgba(255,255,255,.3);
+
+    font-size: 9px;
+
+    letter-spacing: 4px;
+
+    transition:
+        .3s ease;
+}
+
+.telegram-button span {
+    margin-left: 20px;
+}
+
+.telegram-button:hover {
+    background: white;
+
+    color: black;
+
+    transform: translateY(-3px);
+}
+
+.free-text {
+    font-size: 9px !important;
+
+    margin-top: 20px !important;
+
+    letter-spacing: 2px;
+
+    color: rgba(255,255,255,.2) !important;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+    padding: 70px 8vw;
+
+    border-top: 1px solid rgba(255,255,255,.05);
+
+    text-align: center;
+}
+
+.footer-logo {
+    font-size: 24px;
+
+    letter-spacing: 8px;
+
+    font-weight: 300;
+}
+
+footer p {
+    margin-top: 15px;
+
+    font-size: 8px;
+
+    letter-spacing: 4px;
+
+    color: rgba(255,255,255,.25);
+}
+
+footer .copyright {
+    margin-top: 50px;
+}
+
+
+/* =========================
+   MÓVIL
+========================= */
+
+@media (max-width: 700px) {
+
+    .face-container {
+        width: 300px;
+        height: 400px;
+
+        top: 34%;
     }
 
-    h1 {
+    .hero-content {
+        margin-top: 330px;
+    }
+
+    .hero-content h1 {
         font-size: 42px;
-        letter-spacing: 8px;
+
+        letter-spacing: 7px;
+
+        margin-left: 7px;
     }
 
-    .subtitle {
-        font-size: 11px;
+    .hero-description {
+        font-size: 10px;
+
+        letter-spacing: 2px;
     }
 
-    #enterButton {
-        padding: 15px 25px;
+    .section {
+        padding:
+            130px 25px;
+    }
+
+    .section-number {
+        left: 25px;
+    }
+
+    .story-content h2,
+    .reality-content h2,
+    .mission-content h2 {
+        font-size: 52px;
+
+        letter-spacing: -2px;
+    }
+
+    .story-text,
+    .mission-text {
+        font-size: 15px;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+
+        margin-top: 50px;
+    }
+
+    .cards article {
+        min-height: 230px;
+    }
+
+    .cards h3 {
+        margin-top: 50px;
+    }
+
+    .manifesto-list h3 {
+        font-size: 25px;
+    }
+
+    .manifesto-list span {
+        width: 45px;
+    }
+
+    .community h2 {
+        font-size: 65px;
+    }
+
+    .telegram-button {
+        width: 100%;
+
+        justify-content: center;
     }
 }
