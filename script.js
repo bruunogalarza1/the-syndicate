@@ -82,6 +82,216 @@ for (let i = 0; i < 110; i++) {
 }
 
 
+/* =====================================================
+   GRÁFICO DE TRADING DE FONDO (sutil, tendencia alcista)
+===================================================== */
+
+const CHART_VISIBLE = 64;
+const CHART_INTERVAL = 1400;
+
+const chart = {
+    candles: [],
+    price: 100,
+    last: performance.now(),
+    min: 0,
+    max: 0
+};
+
+function nextCandle() {
+
+    const o = chart.price;
+    const move = 0.0014 + (Math.random() - 0.46) * 0.012;
+    const c = o * (1 + move);
+
+    chart.candles.push({
+        o: o,
+        c: c,
+        h: Math.max(o, c) * (1 + Math.random() * 0.003),
+        l: Math.min(o, c) * (1 - Math.random() * 0.003)
+    });
+
+    chart.price = c;
+
+    if (chart.candles.length > CHART_VISIBLE + 3) {
+        chart.candles.shift();
+    }
+
+}
+
+for (let i = 0; i < CHART_VISIBLE + 2; i++) nextCandle();
+
+chart.min = Math.min(...chart.candles.map(c => c.l));
+chart.max = Math.max(...chart.candles.map(c => c.h));
+
+
+function drawChart() {
+
+    const W = digitalCanvas.width;
+    const H = digitalCanvas.height;
+    const g = digitalCtx;
+
+    const now = performance.now();
+
+    if (now - chart.last >= CHART_INTERVAL) {
+        nextCandle();
+        chart.last = now;
+    }
+
+    const progress = Math.min(1, (now - chart.last) / CHART_INTERVAL);
+
+    const n = chart.candles.length;
+    const step = W / CHART_VISIBLE;
+    const right = W * 0.96;
+
+    // Autoescala suave
+    let mn = Infinity;
+    let mx = -Infinity;
+
+    for (const c of chart.candles) {
+        if (c.l < mn) mn = c.l;
+        if (c.h > mx) mx = c.h;
+    }
+
+    const pad = (mx - mn) * 0.08;
+
+    chart.min = lerp(chart.min, mn - pad, 0.04);
+    chart.max = lerp(chart.max, mx + pad, 0.04);
+
+    const top = H * 0.30;
+    const bottom = H * 0.94;
+
+    const yOf = (p) =>
+        top + (1 - (p - chart.min) / (chart.max - chart.min)) * (bottom - top);
+
+    const xOf = (i) =>
+        right - (n - 1 - i) * step + (1 - progress) * step;
+
+    const fade = (x) =>
+        Math.pow(clamp(x / (W * 0.40), 0, 1), 1.6);
+
+
+    /* Líneas de precio (cuadrícula) */
+
+    g.lineWidth = 1;
+
+    for (let k = 0; k < 5; k++) {
+
+        const y = top + ((bottom - top) * k) / 4;
+
+        g.strokeStyle = "rgba(150,160,255,0.035)";
+        g.beginPath();
+        g.moveTo(0, y);
+        g.lineTo(W, y);
+        g.stroke();
+
+    }
+
+
+    /* Velas */
+
+    const bodyW = Math.max(2, step * 0.46);
+
+    for (let i = 0; i < n; i++) {
+
+        const c = chart.candles[i];
+        const x = xOf(i);
+
+        if (x < -step || x > W + step) continue;
+
+        const a = fade(x);
+
+        const yO = yOf(c.o);
+        const yC = yOf(c.c);
+
+        g.strokeStyle = `rgba(150,160,255,${(0.10 * a).toFixed(3)})`;
+        g.lineWidth = 1;
+
+        g.beginPath();
+        g.moveTo(x, yOf(c.h));
+        g.lineTo(x, yOf(c.l));
+        g.stroke();
+
+        const bodyTop = Math.min(yO, yC);
+        const bodyH = Math.max(1.5, Math.abs(yC - yO));
+
+        if (c.c >= c.o) {
+            g.fillStyle = `rgba(150,160,255,${(0.14 * a).toFixed(3)})`;
+            g.fillRect(x - bodyW / 2, bodyTop, bodyW, bodyH);
+        } else {
+            g.strokeStyle = `rgba(150,160,255,${(0.14 * a).toFixed(3)})`;
+            g.strokeRect(x - bodyW / 2, bodyTop, bodyW, bodyH);
+        }
+
+    }
+
+
+    /* Línea de cierres + área */
+
+    const lineGrad = g.createLinearGradient(0, 0, W, 0);
+    lineGrad.addColorStop(0, "rgba(150,160,255,0)");
+    lineGrad.addColorStop(0.45, "rgba(150,160,255,0.16)");
+    lineGrad.addColorStop(1, "rgba(170,180,255,0.26)");
+
+    const areaGrad = g.createLinearGradient(0, 0, W, 0);
+    areaGrad.addColorStop(0, "rgba(120,130,255,0)");
+    areaGrad.addColorStop(1, "rgba(120,130,255,0.045)");
+
+    g.beginPath();
+
+    for (let i = 0; i < n; i++) {
+
+        const x = xOf(i);
+        const y = yOf(chart.candles[i].c);
+
+        if (i === 0) g.moveTo(x, y);
+        else g.lineTo(x, y);
+
+    }
+
+    g.strokeStyle = lineGrad;
+    g.lineWidth = 1.3;
+    g.lineJoin = "round";
+    g.stroke();
+
+    g.lineTo(xOf(n - 1), bottom);
+    g.lineTo(xOf(0), bottom);
+    g.closePath();
+    g.fillStyle = areaGrad;
+    g.fill();
+
+
+    /* Punto del precio actual */
+
+    const lastX = xOf(n - 1);
+    const lastY = yOf(chart.candles[n - 1].c);
+
+    g.strokeStyle = "rgba(170,180,255,0.07)";
+    g.setLineDash([3, 7]);
+    g.beginPath();
+    g.moveTo(0, lastY);
+    g.lineTo(W, lastY);
+    g.stroke();
+    g.setLineDash([]);
+
+    const pulse = 0.5 + 0.5 * Math.sin(time * 3);
+
+    const glow = g.createRadialGradient(lastX, lastY, 0, lastX, lastY, 14);
+    glow.addColorStop(0, `rgba(170,180,255,${(0.25 + pulse * 0.15).toFixed(3)})`);
+    glow.addColorStop(1, "rgba(170,180,255,0)");
+
+    g.fillStyle = glow;
+    g.beginPath();
+    g.arc(lastX, lastY, 14, 0, Math.PI * 2);
+    g.fill();
+
+    g.fillStyle = "rgba(210,215,255,0.6)";
+    g.beginPath();
+    g.arc(lastX, lastY, 2, 0, Math.PI * 2);
+    g.fill();
+
+}
+
+
 function drawParticles() {
 
     digitalCtx.clearRect(
@@ -90,6 +300,8 @@ function drawParticles() {
         digitalCanvas.width,
         digitalCanvas.height
     );
+
+    drawChart();
 
     for (const p of particles) {
 
@@ -160,9 +372,9 @@ function glowCircle(x, y, radius, color) {
    con relieves: cejas, ojos, nariz, labios, mentón...
 ===================================================== */
 
-const HEAD_A = 125;   // ancho
-const HEAD_B = 185;   // alto
-const HEAD_C = 105;   // profundidad
+const HEAD_A = 118;   // ancho
+const HEAD_B = 160;   // alto
+const HEAD_C = 100;   // profundidad
 
 function gauss(t, t0, st, th, th0, sth) {
     return Math.exp(
@@ -175,40 +387,47 @@ function gauss(t, t0, st, th, th0, sth) {
 
 function surf(t, th) {
 
-    const r = Math.sqrt(Math.max(0, 1 - t * t));
+    // Cráneo más "cuadrado" y humano (superelipse)
+    const r = Math.pow(Math.max(0, 1 - t * t), 0.42);
 
-    // La mandíbula se estrecha hacia abajo
-    const jaw = smoothstep(0.05, 1, t);
-    const w = 1 - 0.40 * jaw;
-    const dpt = 1 - 0.12 * jaw;
+    // Mandíbula
+    const jaw = smoothstep(0.15, 1, t);
+    const w = 1 - 0.30 * jaw;
+    const dpt = 1 - 0.10 * jaw;
 
     let d = 0;
 
     // Frente y arco de las cejas
-    d += gauss(t, -0.24, 0.07, th, 0, 0.9) * 8;
+    d += gauss(t, -0.26, 0.07, th, 0, 0.9) * 9;
     d += gauss(t, -0.55, 0.15, th, 0, 0.7) * 4;
 
-    // Cuencas de los ojos
-    d -= gauss(t, -0.10, 0.07, th, 0.5, 0.17) * 10;
-    d -= gauss(t, -0.10, 0.07, th, -0.5, 0.17) * 10;
+    // Cuencas de los ojos (más profundas)
+    d -= gauss(t, -0.10, 0.07, th, 0.5, 0.17) * 12;
+    d -= gauss(t, -0.10, 0.07, th, -0.5, 0.17) * 12;
 
     // Pómulos
-    d += gauss(t, 0.14, 0.10, th, 0.65, 0.20) * 7;
-    d += gauss(t, 0.14, 0.10, th, -0.65, 0.20) * 7;
+    d += gauss(t, 0.14, 0.10, th, 0.65, 0.20) * 9;
+    d += gauss(t, 0.14, 0.10, th, -0.65, 0.20) * 9;
 
     // Nariz: puente, punta y aletas
-    d += gauss(t, 0.08, 0.17, th, 0, 0.07) * 14;
-    d += gauss(t, 0.27, 0.05, th, 0, 0.09) * 16;
-    d += gauss(t, 0.29, 0.04, th, 0.13, 0.07) * 8;
-    d += gauss(t, 0.29, 0.04, th, -0.13, 0.07) * 8;
+    d += gauss(t, 0.08, 0.17, th, 0, 0.07) * 16;
+    d += gauss(t, 0.27, 0.05, th, 0, 0.09) * 20;
+    d += gauss(t, 0.29, 0.04, th, 0.14, 0.07) * 10;
+    d += gauss(t, 0.29, 0.04, th, -0.14, 0.07) * 10;
 
-    // Labios
-    d += gauss(t, 0.50, 0.035, th, 0, 0.28) * 7;
-    d -= gauss(t, 0.555, 0.014, th, 0, 0.30) * 5;
-    d += gauss(t, 0.62, 0.04, th, 0, 0.26) * 6;
+    // Labios (más llenos) y comisuras
+    d += gauss(t, 0.50, 0.035, th, 0, 0.28) * 8;
+    d -= gauss(t, 0.555, 0.014, th, 0, 0.30) * 6;
+    d += gauss(t, 0.62, 0.04, th, 0, 0.26) * 7;
 
-    // Mentón
-    d += gauss(t, 0.80, 0.09, th, 0, 0.35) * 11;
+    // Mentón y ángulo de la mandíbula
+    d += gauss(t, 0.80, 0.09, th, 0, 0.35) * 12;
+    d += gauss(t, 0.60, 0.12, th, 0.95, 0.20) * 6;
+    d += gauss(t, 0.60, 0.12, th, -0.95, 0.20) * 6;
+
+    // Orejas
+    d += gauss(t, 0.02, 0.14, th, 1.5, 0.16) * 14;
+    d += gauss(t, 0.02, 0.14, th, -1.5, 0.16) * 14;
 
     const sx = Math.sin(th);
     const cz = Math.cos(th);
@@ -288,57 +507,92 @@ function makeFeature(fn, steps) {
 
 const features = [];
 
-// Cejas
 for (const s of [-1, 1]) {
-    features.push({
-        w: 1.8,
-        a: 0.55,
-        pts: makeFeature(k => [-0.27 - 0.045 * Math.sin(k * Math.PI), s * (0.2 + 0.6 * k)], 24)
-    });
-}
 
-// Puente y base de la nariz
-for (const s of [-1, 1]) {
+    // Cejas
+    features.push({
+        w: 2,
+        a: 0.60,
+        pts: makeFeature(k => [-0.285 - 0.05 * Math.sin(k * Math.PI), s * (0.18 + 0.62 * k)], 24)
+    });
+
+    // Párpado superior (arco sobre el ojo)
     features.push({
         w: 1.2,
-        a: 0.40,
+        a: 0.35,
+        pts: makeFeature(k => [-0.10 - 0.045 * Math.sin(k * Math.PI), s * (0.28 + 0.44 * k)], 18)
+    });
+
+    // Bolsa inferior del ojo
+    features.push({
+        w: 1,
+        a: 0.20,
+        pts: makeFeature(k => [-0.10 + 0.05 * Math.sin(k * Math.PI), s * (0.30 + 0.40 * k)], 18)
+    });
+
+    // Línea del pómulo
+    features.push({
+        w: 1,
+        a: 0.22,
+        pts: makeFeature(k => [0.12 + 0.05 * k, s * (1.0 - 0.45 * k)], 18)
+    });
+
+    // Surco nasolabial
+    features.push({
+        w: 1.1,
+        a: 0.28,
+        pts: makeFeature(k => [0.32 + 0.22 * k, s * (0.22 + 0.12 * Math.sin(k * Math.PI * 0.9) + 0.10 * k)], 16)
+    });
+
+    // Puente de la nariz
+    features.push({
+        w: 1.2,
+        a: 0.42,
         pts: makeFeature(k => [-0.10 + 0.37 * k, s * (0.05 + 0.05 * k)], 14)
     });
+
+    // Mandíbula
+    features.push({
+        w: 1.3,
+        a: 0.42,
+        pts: makeFeature(k => [0.26 + 0.66 * k, s * (1.25 - 0.95 * k)], 22)
+    });
+
 }
 
+// Base de la nariz
 features.push({
     w: 1.2,
-    a: 0.45,
+    a: 0.48,
     pts: makeFeature(k => [0.31 + 0.03 * Math.sin(k * Math.PI), -0.17 + 0.34 * k], 16)
 });
 
-// Labios
+// Labio superior (contorno)
 features.push({
-    w: 1.6,
-    a: 0.60,
-    pts: makeFeature(k => [0.555 + 0.012 * Math.cos((k - 0.5) * Math.PI * 1.6) - 0.012, -0.32 + 0.64 * k], 24)
+    w: 1.1,
+    a: 0.38,
+    pts: makeFeature(k => [0.50 - 0.028 * Math.sin(k * Math.PI), -0.27 + 0.54 * k], 20)
 });
 
+// Línea de la boca
+features.push({
+    w: 1.7,
+    a: 0.62,
+    pts: makeFeature(k => [0.555 + 0.012 * Math.cos((k - 0.5) * Math.PI * 1.6) - 0.012, -0.33 + 0.66 * k], 24)
+});
+
+// Labio inferior
 features.push({
     w: 1.1,
     a: 0.35,
-    pts: makeFeature(k => [0.50 - 0.025 * Math.sin(k * Math.PI), -0.26 + 0.52 * k], 20)
+    pts: makeFeature(k => [0.585 + 0.05 * Math.sin(k * Math.PI), -0.24 + 0.48 * k], 18)
 });
-
-// Mandíbula
-for (const s of [-1, 1]) {
-    features.push({
-        w: 1.3,
-        a: 0.40,
-        pts: makeFeature(k => [0.28 + 0.64 * k, s * (1.25 - 0.95 * k)], 22)
-    });
-}
 
 // Mentón
 features.push({
     w: 1.1,
     a: 0.35,
-    pts: makeFeature(k => [0.84 + 0.02 * Math.sin(k * Math.PI), -0.4 + 0.8 * k], 16)
+    pts: makeFeature(k => [0.85 + 0.02 * Math.sin(k * Math.PI), -0.4 + 0.8 * k], 16)
 });
 
 
