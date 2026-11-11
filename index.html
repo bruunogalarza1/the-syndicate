@@ -1,28 +1,51 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>The Syndicate</title>
+    <title>The Syndicate | Comunidad de Traders</title>
+
+    <meta name="description" content="Una comunidad para traders que quieren dejar de recorrer este camino solos.">
 
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
+    <!-- CARGA -->
+
+    <div id="loader">
+        <div class="loader-line"></div>
+        <p>INICIANDO CONEXIÓN</p>
+    </div>
+
+
+    <!-- FONDO -->
+
+    <canvas id="digitalCanvas"></canvas>
+
+    <div class="noise"></div>
+
+
     <!-- PANTALLA PRINCIPAL -->
 
-    <section class="hero">
+    <main id="inicio">
 
         <div class="face-container">
+
+            <div class="face-glow"></div>
+
             <canvas id="faceCanvas"></canvas>
+
+            <div class="scan-line"></div>
+
         </div>
 
-        <div class="contenido">
 
-            <p class="texto-pequeno">
+        <section class="hero-content">
+
+            <p class="eyebrow">
                 ENCONTRASTE THE SYNDICATE
             </p>
 
@@ -30,118 +53,159 @@
                 THE SYNDICATE
             </h1>
 
-            <p class="subtitular">
+            <p class="hero-description">
                 Una comunidad para traders.
             </p>
 
-            <button id="enterButton">
-                ENTRAR A LA COMUNIDAD →
+            <button class="main-button" id="enterButton">
+                ENTRAR A LA COMUNIDAD
+                <span>→</span>
             </button>
 
-            <p class="scroll">
-                — DESPLAZA PARA DESCUBRIR —
-            </p>
+            <div class="scroll-indicator">
+                <span></span>
+                DESPLAZÁ PARA DESCUBRIR
+            </div>
 
+        </section>
+
+    </main>
+
+
+    <!-- HISTORIA -->
+
+    <section class="story section">
+
+        <div class="section-number">
+            01
         </div>
 
-    </section>
+        <div class="story-content">
 
-
-    <!-- EL PRINCIPIO -->
-
-    <section class="story">
-
-        <div class="seccion">
-
-            <p class="numero">
-                01
-            </p>
-
-            <h2>
+            <p class="label">
                 EL PRINCIPIO
+            </p>
+
+            <h2>
+                YO TAMBIÉN<br>
+                LO HICE SOLO.
             </h2>
 
-            <h3>
-                Yo también lo hice solo.
-            </h3>
+            <div class="story-text">
 
-            <p>
-                Durante mucho tiempo estuve buscando mi propia forma
-                de hacer trading.
-            </p>
+                <p>
+                    Tardé mucho tiempo en encontrar
+                    algo que realmente funcionara para mí.
+                </p>
 
-            <p class="destacado">
-                Tardé mucho tiempo en encontrar algo que realmente
-                funcionara para mí.
-            </p>
+                <p>
+                    ¿Soy rico?
+                    <strong>No.</strong>
+                </p>
 
-            <p>
-                No tuve un mentor que me llevara de la mano.
-                No tuve una comunidad de traders acompañándome.
-                Tuve que aprender, equivocarme, probar, perder
-                y volver a empezar.
-            </p>
+                <p>
+                    ¿Tengo un súper auto o un auto último modelo?
+                    <strong>Tampoco.</strong>
+                </p>
 
-            <h3>
-                ¿Soy rico? No.
-            </h3>
+                <p>
+                    Pero vivo con libertad de tiempo.
+                </p>
 
-            <p>
-                ¿Tengo un súper auto o un auto último modelo?
-                Tampoco.
-            </p>
-
-            <p class="destacado">
-                Pero vivo con libertad de tiempo.
-            </p>
+            </div>
 
         </div>
 
     </section>
 
 
-    <!-- LO QUE VAS A ENCONTRAR -->
+    <!-- FILOSOFÍA -->
 
-    <section class="story">
+    <section class="manifesto section">
 
-        <div class="seccion">
+        <div class="section-number">
+            02
+        </div>
 
-            <p class="numero">
-                02
+        <div class="manifesto-content">
+
+            <p class="label">
+                LO QUE VAS A ENCONTRAR ACÁ
+            </p>
+
+            <div class="manifesto-list">
+
+                <div>
+                    <span>01</span>
+                    <h3>NO VENDO SEÑALES.</h3>
+                </div>
+
+                <div>
+                    <span>02</span>
+                    <h3>NO VENDO CURSOS.</h3>
+                </div>
+
+                <div>
+                    <span>03</span>
+                    <h3>SOLO MUESTRO MI TRADING.</h3>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- PROPUESTA -->
+
+    <section class="reality section">
+
+        <div class="section-number">
+            03
+        </div>
+
+        <div class="reality-content">
+
+            <p class="label">
+                LO QUE SÍ HACEMOS
             </p>
 
             <h2>
-                LO QUE VAS A ENCONTRAR ACÁ
+                MOSTRAR<br>
+                EL CAMINO REAL.
             </h2>
 
-            <h3>
-                No vendo señales.
-            </h3>
+            <div class="cards">
 
-            <h3>
-                No vendo cursos.
-            </h3>
+                <article>
+                    <span>01</span>
+                    <h3>MI TRADING</h3>
+                    <p>
+                        Operaciones, análisis, errores,
+                        aciertos y decisiones reales.
+                    </p>
+                </article>
 
-            <p class="destacado">
-                Solo muestro mi trading.
-            </p>
+                <article>
+                    <span>02</span>
+                    <h3>INFORMACIÓN</h3>
+                    <p>
+                        Herramientas, conceptos y
+                        información útil para traders.
+                    </p>
+                </article>
 
-            <p>
-                Mis análisis.
-                Mis operaciones.
-                Mis aciertos.
-                Mis errores.
-                Lo que estoy viendo y cómo tomo mis decisiones.
-            </p>
+                <article>
+                    <span>03</span>
+                    <h3>COMUNIDAD</h3>
+                    <p>
+                        Personas que comparten el mismo
+                        camino y quieren mejorar.
+                    </p>
+                </article>
 
-            <p>
-                No quiero venderte la idea de que existe
-                un camino fácil.
-            </p>
-
-            <p class="destacado">
-                Quiero mostrarte el camino real.
-            </p>
+            </div>
 
         </div>
 
@@ -150,129 +214,125 @@
 
     <!-- POR QUÉ CREO ESTA COMUNIDAD -->
 
-    <section class="story">
+    <section class="mission section">
 
-        <div class="seccion">
+        <div class="section-number">
+            04
+        </div>
 
-            <p class="numero">
-                03
+        <div class="mission-content">
+
+            <p class="label">
+                ¿POR QUÉ CREO ESTA COMUNIDAD?
             </p>
 
             <h2>
-                ¿POR QUÉ CREO ESTA COMUNIDAD?
+                YO TAMBIÉN<br>
+                EMPECÉ SOLO.
             </h2>
 
-            <p>
-                Porque yo me formé solo.
+            <p class="mission-text">
+                Yo me formé solo. Nunca tuve un mentor
+                ni una comunidad que me acompañara
+                durante el proceso.
             </p>
 
-            <p>
-                Durante mucho tiempo me hubiera gustado tener
-                un lugar donde pudiera compartir mis ideas,
-                ver cómo otros traders pensaban y sentir que
-                no estaba haciendo todo esto completamente solo.
+            <p class="mission-text">
+                Durante mucho tiempo me hubiera gustado
+                tener un lugar donde pudiera compartir
+                mis análisis, mis dudas, mis errores
+                y también aprender de otros traders.
             </p>
 
-            <p>
-                Nunca tuve un mentor.
-                Nunca tuve una comunidad que me acompañara
-                en el proceso.
+            <p class="mission-text">
+                Ahora que estoy donde quiero estar,
+                quiero construir la comunidad que
+                a mí me hubiera gustado encontrar
+                cuando empecé.
             </p>
 
-            <p class="destacado">
-                Y ahora que encontré mi manera de hacer las cosas
-                y estoy donde quiero estar, decidí crear algo
-                que a mí me hubiera gustado encontrar cuando empecé.
+            <p class="mission-text">
+                Pero quiero que sea diferente.
+                No quiero un grupo lleno de señales,
+                promesas ni gente buscando hacerse rica
+                de un día para otro.
             </p>
 
-            <p>
-                Pero no quiero crear otro grupo lleno de señales,
-                promesas o gente buscando hacerse rica rápido.
+            <p class="mission-text">
+                Quiero un grupo de traders que tengan
+                un objetivo en común.
             </p>
 
-            <p>
-                Quiero crear un grupo de traders que estén
-                persiguiendo un mismo objetivo.
+            <p class="mission-text">
+                Personas diferentes, con historias
+                diferentes, pero avanzando en la
+                misma dirección.
             </p>
 
-            <p class="destacado">
-                Personas diferentes. Historias diferentes.
-                Un mismo camino.
+            <p class="mission-text highlight">
+                Aprender juntos. Mejorar juntos.
+                Y llegar juntos.
             </p>
 
-            <p>
-                Aprender juntos.<br>
-                Compartir análisis.<br>
-                Compartir operaciones.<br>
-                Equivocarnos.<br>
-                Mejorar.<br>
-                Y avanzar.
-            </p>
-
-            <p class="destacado">
-                No se trata de quién llega primero.
-                Se trata de que lleguemos juntos.
-            </p>
-
-            <h3>
+            <p class="mission-text highlight">
                 Por eso existe The Syndicate.
-            </h3>
+            </p>
 
         </div>
 
     </section>
 
 
-    <!-- 300 PERSONAS -->
+    <!-- 300 -->
 
-    <section class="story comunidad">
+    <section class="community section">
 
-        <div class="seccion">
+        <div class="community-glow"></div>
 
-            <p class="numero">
-                04
+        <div class="community-content">
+
+            <p class="label">
+                EL PRIMER OBJETIVO
             </p>
 
             <h2>
-                300 PERSONAS
+                LOS PRIMEROS
+                <span>300</span>
             </h2>
 
             <p>
-                Quiero empezar con algo pequeño.
+                Quiero construir una comunidad sana,
+                real y activa de traders.
             </p>
 
-            <p class="destacado">
-                300 traders.
-            </p>
+            <div class="counter">
 
-            <p>
-                No quiero miles de personas entrando sin saber
-                quién está del otro lado.
-            </p>
-
-            <p>
-                Quiero construir una comunidad donde las personas
-                realmente se conozcan, compartan y aporten.
-            </p>
-
-            <div class="precio">
-
-                <p>
-                    CUANDO LLEGUEMOS A
-                </p>
-
-                <strong>
-                    300 MIEMBROS
-                </strong>
-
-                <p>
-                    LA COMUNIDAD PASARÁ A FUNCIONAR CON UNA
-                    MEMBRESÍA DE
-                </p>
-
-                <div class="valor">
-                    $5 USD
+                <div class="counter-number">
+                    <span id="memberCount">0</span>
+                    <small>/ 300</small>
                 </div>
+
+                <div class="progress">
+                    <div id="progressBar"></div>
+                </div>
+
+                <p>
+                    EL COMIENZO DE ALGO MÁS GRANDE.
+                </p>
+
+            </div>
+
+            <p>
+                Cuando lleguemos a 300 miembros,
+                la comunidad pasará a tener una
+                membresía de:
+            </p>
+
+            <div style="margin-top: 30px;">
+
+                <strong style="font-size: 42px; font-weight: 300;">
+                    $5 USD
+                </strong>
 
                 <p>
                     AL MES
@@ -281,100 +341,60 @@
             </div>
 
             <p>
-                No puse ese precio para hacer un negocio enorme.
-            </p>
-
-            <p class="destacado">
-                Lo puse como un valor simbólico.
+                Es un valor simbólico.
             </p>
 
             <p>
-                Porque también creo que cuando algo es completamente
-                gratis, muchas veces las personas no le dan el valor
-                que realmente merece.
+                Porque creo que cuando algo es completamente
+                gratis, muchas veces las personas no le dan
+                el valor que realmente merece.
             </p>
 
             <p>
-                Quiero que esos $5 representen algo simple:
+                Quiero que esos $5 sean simplemente una forma
+                de demostrar que realmente querés formar parte
+                de esta comunidad.
             </p>
 
-            <p class="destacado">
-                Si estás acá, es porque realmente querés
-                formar parte.
+            <a
+                class="telegram-button"
+                href="https://t.me/TU_GRUPO"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                ENTRAR A THE SYNDICATE
+                <span>→</span>
+            </a>
+
+            <p class="free-text">
+                COMUNIDAD DE TRADERS · $5 USD AL MES
             </p>
-
-            <p>
-                Todo lo que comparto sobre mi trading seguirá
-                teniendo como objetivo aportar valor.
-            </p>
-
-            <p>
-                Y The Syndicate será el lugar donde podamos
-                hacerlo juntos.
-            </p>
-
-            <div class="manifiesto">
-
-                <span>
-                    300 PERSONAS.
-                </span>
-
-                <span>
-                    UN MISMO OBJETIVO.
-                </span>
-
-                <span>
-                    UNA COMUNIDAD DE TRADERS.
-                </span>
-
-            </div>
 
         </div>
 
     </section>
 
 
-    <!-- CIERRE -->
+    <!-- FINAL -->
 
-    <section class="final">
+    <footer>
 
-        <div class="final-contenido">
-
-            <p>
-                THE SYNDICATE
-            </p>
-
-            <h2>
-                NO LLEGUES SOLO.
-            </h2>
-
-            <button id="telegramButton">
-                UNIRME A THE SYNDICATE →
-            </button>
-
-        </div>
-
-    </section>
-
-
-    <!-- CANVAS DIGITAL -->
-
-    <canvas id="digitalCanvas"></canvas>
-
-
-    <!-- CARGA -->
-
-    <div id="loader">
-
-        <div>
+        <div class="footer-logo">
             THE SYNDICATE
         </div>
 
-    </div>
+        <p>
+            TRADING · COMUNIDAD · PROGRESO
+        </p>
+
+        <p class="copyright">
+            © 2026 The Syndicate
+        </p>
+
+    </footer>
 
 
     <script src="script.js"></script>
 
 </body>
-
 </html>
