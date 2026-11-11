@@ -4,37 +4,335 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>The Syndicate</title>
+    <title>The Syndicate | Comunidad de Traders</title>
+
+    <meta name="description" content="Una comunidad para traders que quieren dejar de recorrer este camino solos.">
 
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <main class="hero">
+    <!-- CARGA -->
 
-        <div class="face">
-            <div class="eye left"></div>
-            <div class="eye right"></div>
+    <div id="loader">
+        <div class="loader-line"></div>
+        <p>INICIANDO CONEXIÓN</p>
+    </div>
+
+
+    <!-- FONDO -->
+
+    <canvas id="digitalCanvas"></canvas>
+
+    <div class="noise"></div>
+
+
+    <!-- PANTALLA PRINCIPAL -->
+
+    <main id="inicio">
+
+        <div class="face-container">
+
+            <div class="face-glow"></div>
+
+            <canvas id="faceCanvas"></canvas>
+
+            <div class="scan-line"></div>
+
         </div>
 
-        <div class="content">
 
-            <p class="small-text">YOU FOUND THE SYNDICATE</p>
+        <section class="hero-content">
 
-            <h1>THE SYNDICATE</h1>
-
-            <p class="subtitle">
-                A community for traders.
+            <p class="eyebrow">
+                ENCONTRASTE THE SYNDICATE
             </p>
 
-            <button id="enterButton">
-                ENTER THE SYNDICATE
+            <h1>
+                THE SYNDICATE
+            </h1>
+
+            <p class="hero-description">
+                Una comunidad para traders.
+            </p>
+
+            <button class="main-button" id="enterButton">
+                ENTRAR A LA COMUNIDAD
+                <span>→</span>
             </button>
+
+            <div class="scroll-indicator">
+                <span></span>
+                DESPLAZÁ PARA DESCUBRIR
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- HISTORIA -->
+
+    <section class="story section">
+
+        <div class="section-number">
+            01
+        </div>
+
+        <div class="story-content">
+
+            <p class="label">
+                EL PRINCIPIO
+            </p>
+
+            <h2>
+                YO TAMBIÉN<br>
+                LO HICE SOLO.
+            </h2>
+
+            <div class="story-text">
+
+                <p>
+                    Aprendí trading por mi cuenta.
+                    Cometí errores, perdí dinero, pasé
+                    incontables horas frente a los gráficos
+                    y tardé mucho tiempo en encontrar
+                    algo que realmente funcionara para mí.
+                </p>
+
+                <p>
+                    ¿Soy rico?
+                    <strong>No.</strong>
+                </p>
+
+                <p>
+                    ¿Me puedo comprar un Lamborghini?
+                    <strong>Tampoco.</strong>
+                </p>
+
+                <p>
+                    Pero hoy puedo vivir tranquilo con mi familia
+                    gracias a esto.
+                </p>
+
+            </div>
 
         </div>
 
-    </main>
+    </section>
+
+
+    <!-- FILOSOFÍA -->
+
+    <section class="manifesto section">
+
+        <div class="section-number">
+            02
+        </div>
+
+        <div class="manifesto-content">
+
+            <p class="label">
+                LO QUE NO VAS A ENCONTRAR ACÁ
+            </p>
+
+            <div class="manifesto-list">
+
+                <div>
+                    <span>01</span>
+                    <h3>NO VENDEMOS HUMO.</h3>
+                </div>
+
+                <div>
+                    <span>02</span>
+                    <h3>NO PROMETEMOS RIQUEZA.</h3>
+                </div>
+
+                <div>
+                    <span>03</span>
+                    <h3>NO VENDEMOS SEÑALES.</h3>
+                </div>
+
+                <div>
+                    <span>04</span>
+                    <h3>NO VENDEMOS CURSOS.</h3>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- PROPUESTA -->
+
+    <section class="reality section">
+
+        <div class="section-number">
+            03
+        </div>
+
+        <div class="reality-content">
+
+            <p class="label">
+                LO QUE SÍ HACEMOS
+            </p>
+
+            <h2>
+                MOSTRAR<br>
+                EL CAMINO REAL.
+            </h2>
+
+            <div class="cards">
+
+                <article>
+                    <span>01</span>
+                    <h3>MI TRADING</h3>
+                    <p>
+                        Operaciones, análisis, errores,
+                        aciertos y decisiones reales.
+                    </p>
+                </article>
+
+                <article>
+                    <span>02</span>
+                    <h3>INFORMACIÓN</h3>
+                    <p>
+                        Herramientas, conceptos y
+                        información útil para traders.
+                    </p>
+                </article>
+
+                <article>
+                    <span>03</span>
+                    <h3>COMUNIDAD</h3>
+                    <p>
+                        Personas que comparten el mismo
+                        camino y quieren mejorar.
+                    </p>
+                </article>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- MISIÓN -->
+
+    <section class="mission section">
+
+        <div class="section-number">
+            04
+        </div>
+
+        <div class="mission-content">
+
+            <p class="label">
+                LA MISIÓN
+            </p>
+
+            <h2>
+                NO QUIERO QUE<br>
+                TARDES LO QUE<br>
+                YO TARDÉ.
+            </h2>
+
+            <p class="mission-text">
+                Si cuando empecé hubiera tenido una comunidad
+                donde pudiera compartir mis dudas, mis errores,
+                mis análisis y mis experiencias, probablemente
+                mi camino habría sido diferente.
+            </p>
+
+            <p class="mission-text highlight">
+                Por eso existe The Syndicate.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- 500 -->
+
+    <section class="community section">
+
+        <div class="community-glow"></div>
+
+        <div class="community-content">
+
+            <p class="label">
+                EL PRIMER OBJETIVO
+            </p>
+
+            <h2>
+                LOS PRIMEROS
+                <span>500</span>
+            </h2>
+
+            <p>
+                Queremos construir una comunidad sana,
+                real y activa de traders.
+            </p>
+
+            <div class="counter">
+
+                <div class="counter-number">
+                    <span id="memberCount">0</span>
+                    <small>/ 500</small>
+                </div>
+
+                <div class="progress">
+                    <div id="progressBar"></div>
+                </div>
+
+                <p>
+                    EL COMIENZO DE ALGO MÁS GRANDE.
+                </p>
+
+            </div>
+
+            <a
+                class="telegram-button"
+                href="https://t.me/TU_GRUPO"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                ENTRAR A THE SYNDICATE
+                <span>→</span>
+            </a>
+
+            <p class="free-text">
+                Comunidad gratuita.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- FINAL -->
+
+    <footer>
+
+        <div class="footer-logo">
+            THE SYNDICATE
+        </div>
+
+        <p>
+            TRADING · COMUNIDAD · PROGRESO
+        </p>
+
+        <p class="copyright">
+            © 2026 The Syndicate
+        </p>
+
+    </footer>
+
 
     <script src="script.js"></script>
 
